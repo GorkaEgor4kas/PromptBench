@@ -66,7 +66,7 @@ def run(
     if output:
         import json
         with open(output, "w") as f:
-            json.dumps(results, f, indent=2)
+            json.dump(results, f, indent=2)
         console.print(f"[green]Results saved to {output}[/green]")
 
 @app.command()
