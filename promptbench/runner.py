@@ -61,7 +61,7 @@ async def _call_one(
         }
 
 
-async def run(
+async def run_all(
     clients: dict[str, dict],  # {name: {"client": AsyncOpenAI, "model": str}}
     prompt: str,
     query: str,

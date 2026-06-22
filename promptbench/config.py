@@ -1,6 +1,9 @@
 import os 
 from pydantic import BaseModel
 from openai import AsyncOpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class LLMConfig(BaseModel):
     name: str
@@ -25,7 +28,7 @@ def load_llm_config() -> list[LLMConfig]:
             name = name,
             key = os.getenv(f"LLM_{i}_KEY", ""),
             base_url = os.getenv(f"LLM_{i}_BASE_URL", "https://api.openai.com/v1"),
-            model = os.getenv(f"LLM_{i}_KEY", "")
+            model = os.getenv(f"LLM_{i}_MODEL", "")
         ))
         i += 1
 
@@ -36,5 +39,9 @@ def create_clients(configs: list[LLMConfig]) -> dict[str, AsyncOpenAI]:
     Creates clients for each config 
     """
     return {
-        cfg.name: AsyncOpenAI(api_key=cfg.key, base_url=cfg.base_url) for cfg in configs
+        cfg.name: {
+            "client": AsyncOpenAI(api_key=cfg.key, base_url=cfg.base_url),
+            "model": cfg.model
+        }
+        for cfg in configs
     }
